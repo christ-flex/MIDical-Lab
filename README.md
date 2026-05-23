@@ -41,3 +41,15 @@ MIDs (LOW 937700011015 / MED 937700011639) and regenerate every Monday.
 The HTML files are self-contained — embedded CSS, Inter from Google Fonts with
 system-sans fallback, no external assets or JavaScript. Inline SVG for all
 charts and sparklines.
+
+## Auto-refresh
+
+GitHub CLI is configured locally so Claude Code can push refreshes from a
+synthesize run without manual git operations. To refresh:
+
+```bash
+cd "C:\ClaudeProjects\Flex Toolkit"
+python "MIDical Lab/scripts/synthesize_weekly_and_monthly.py"
+cd "MIDical Lab/site"
+git add . && git commit -m "Refresh samples" && git push
+```
