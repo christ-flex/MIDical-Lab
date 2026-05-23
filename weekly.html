@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIDical Lab — Weekly Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --coral: #FF5B5B;
+  --coral-dark: #E84545;
+  --charcoal: #3C3C42;
+  --charcoal-soft: #5A5A63;
+  --bg: #F8F8F8;
+  --card: #FFFFFF;
+  --border: #E5E5EA;
+  --muted: #6B7280;
+  --positive: #16A34A;
+  --positive-bg: #D1FAE5;
+  --negative: #DC2626;
+  --negative-bg: #FEE2E2;
+  --warning: #B45309;
+  --warning-bg: #FEF3C7;
+}
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--charcoal);
+  margin: 0;
+  padding: 32px 16px;
+  line-height: 1.55;
+  font-size: 14px;
+}
+.report {
+  max-width: 1120px;
+  margin: 0 auto;
+  background: var(--card);
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+.brand-bar {
+  height: 5px;
+  background: linear-gradient(90deg, var(--coral) 0%, var(--coral-dark) 100%);
+}
+.report-body { padding: 36px 44px 44px; }
+.report-header { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin-bottom: 8px;
+}
+h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--charcoal);
+  margin: 0 0 10px;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+h2 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--charcoal);
+  margin: 32px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: -0.005em;
+}
+h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--charcoal-soft);
+  margin: 22px 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+p { margin: 8px 0 12px; }
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.meta-item .label {
+  font-weight: 600;
+  color: var(--charcoal);
+  margin-right: 5px;
+}
+.meta-item code {
+  background: var(--bg);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--charcoal);
+  border: 1px solid var(--border);
+}
+.headline-card {
+  background: var(--bg);
+  border-left: 4px solid var(--coral);
+  padding: 18px 22px;
+  margin: 14px 0 22px;
+  border-radius: 0 6px 6px 0;
+  font-size: 15px;
+}
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+  margin: 18px 0 8px;
+}
+.kpi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.kpi-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 700;
+}
+.kpi-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--charcoal);
+  margin-top: 6px;
+  letter-spacing: -0.01em;
+}
+.kpi-value.positive { color: var(--positive); }
+.kpi-value.negative { color: var(--negative); }
+.kpi-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 16px;
+  font-size: 13px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+thead th {
+  background: var(--charcoal);
+  color: #FFFFFF;
+  font-weight: 600;
+  text-align: left;
+  padding: 9px 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--charcoal);
+  white-space: nowrap;
+}
+thead th.num { text-align: right; }
+tbody td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tbody td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+tbody td.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+}
+tbody tr:nth-child(even) td { background: #FAFAFB; }
+tbody tr:last-child td { border-bottom: none; }
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin: 12px 0 16px;
+  background: var(--card);
+}
+.table-scroll > table {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  min-width: max-content;
+}
+table.table-dense { font-size: 12px; }
+table.table-dense thead th { padding: 7px 9px; font-size: 10px; letter-spacing: 0.04em; }
+table.table-dense tbody td { padding: 6px 9px; }
+table.table-dense tbody td.num { font-size: 12px; }
+.chart-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px 6px;
+  margin: 12px 0 18px;
+  overflow: hidden;
+}
+.chart-wrap svg { width: 100%; height: auto; display: block; }
+.sparkline-cell svg { display: inline-block; }
+.pill {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 11px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.pill-degrading { background: var(--negative-bg); color: #B91C1C; }
+.pill-watch     { background: var(--warning-bg); color: var(--warning); }
+.pill-healthy   { background: var(--positive-bg); color: #047857; }
+.pill-pull      { background: var(--negative-bg); color: #B91C1C; }
+.pill-continue  { background: var(--positive-bg); color: #047857; }
+.delta-positive { color: var(--positive); font-weight: 600; }
+.delta-negative { color: var(--negative); font-weight: 600; }
+.delta-zero     { color: var(--muted); }
+.note {
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--charcoal-soft);
+  margin: 14px 0;
+  border-left: 3px solid var(--border);
+}
+.section-intro { color: var(--charcoal-soft); margin: 4px 0 12px; }
+.recs { padding-left: 22px; }
+.recs li { margin: 8px 0; }
+.footer {
+  border-top: 1px solid var(--border);
+  margin-top: 36px;
+  padding-top: 14px;
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+@media print {
+  body { background: white; padding: 0; font-size: 11px; }
+  .report { box-shadow: none; border-radius: 0; }
+  .report-body { padding: 24px 28px; }
+  thead th { background: #3C3C42 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+<div class="report">
+<div class="brand-bar"></div>
+<div class="report-body">
+<div class="report-header">
+<div class="eyebrow">Weekly experiment monitor</div>
+<h1>MIDical Lab — Weekly Report</h1>
+<div class="meta"><div class="meta-item"><span class="label">CAID:</span><code>937700006246</code></div><div class="meta-item"><span class="label">Run date:</span>2026-05-22</div><div class="meta-item"><span class="label">Source CSVs:</span><code>MIDical Lab/output/2026-05-20/</code></div></div>
+</div>
+<h2>Headline</h2>
+<div class="headline-card">Approval <strong>9.33%</strong> this week (4,672 auths) vs 9.03% prior week (<span class="delta-positive">+0.30 pp</span> WoW). Peak over the window was <strong>10.79%</strong> in week-of 2026-04-27. Pull decision: <span class="pill pill-continue">CONTINUE</span> (2 of 15 top BINs degrading, 13.3%).</div>
+<div class="kpi-row">
+<div class="kpi-card"><div class="kpi-label">Approval this week</div><div class="kpi-value">9.33%</div><div class="kpi-sub">4,672 auths</div></div>
+<div class="kpi-card"><div class="kpi-label">WoW change</div><div class="kpi-value positive">+0.30 pp</div><div class="kpi-sub">prior wk 9.03%</div></div>
+<div class="kpi-card"><div class="kpi-label">Peak (window)</div><div class="kpi-value">10.79%</div><div class="kpi-sub">wk of 2026-04-27</div></div>
+<div class="kpi-card"><div class="kpi-label">Decision</div><div class="kpi-value positive">Continue</div><div class="kpi-sub">2/15 degrading (13.3%)</div></div>
+</div>
+<h2>Approval trend (last 8 weeks)</h2>
+<table>
+<thead><tr><th>Week start</th><th class="num">Auths</th><th class="num">Approvals</th><th class="num">Approval rate</th><th class="num">WoW (pp)</th></tr></thead>
+<tbody>
+<tr><td>2026-03-30</td><td class="num">7,037</td><td class="num">628</td><td class="num">8.92%</td><td class="num"><span class="delta-zero">-</span></td></tr>
+<tr><td>2026-04-06</td><td class="num">7,194</td><td class="num">600</td><td class="num">8.34%</td><td class="num"><span class="delta-negative">-0.58 pp</span></td></tr>
+<tr><td>2026-04-13</td><td class="num">7,371</td><td class="num">568</td><td class="num">7.71%</td><td class="num"><span class="delta-negative">-0.63 pp</span></td></tr>
+<tr><td>2026-04-20</td><td class="num">7,334</td><td class="num">697</td><td class="num">9.50%</td><td class="num"><span class="delta-positive">+1.79 pp</span></td></tr>
+<tr><td>2026-04-27</td><td class="num">13,059</td><td class="num">1,409</td><td class="num">10.79%</td><td class="num"><span class="delta-positive">+1.29 pp</span></td></tr>
+<tr><td>2026-05-04</td><td class="num">10,963</td><td class="num">1,107</td><td class="num">10.10%</td><td class="num"><span class="delta-negative">-0.69 pp</span></td></tr>
+<tr><td>2026-05-11</td><td class="num">11,366</td><td class="num">1,026</td><td class="num">9.03%</td><td class="num"><span class="delta-negative">-1.07 pp</span></td></tr>
+<tr><td>2026-05-18</td><td class="num">4,672</td><td class="num">436</td><td class="num">9.33%</td><td class="num"><span class="delta-positive">+0.30 pp</span></td></tr>
+</tbody>
+</table>
+
+<div class="chart-wrap"><svg viewBox="0 0 720 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Approval rate — last 8 weeks"><rect x="0" y="0" width="720" height="220" fill="#FFFFFF"/><text x="46" y="12" font-size="11" font-weight="600" fill="#3C3C42">Approval rate — last 8 weeks</text><line x1="46" y1="182.0" x2="600" y2="182.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="141.0" x2="600" y2="141.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="100.0" x2="600" y2="100.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="59.0" x2="600" y2="59.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="18.0" x2="600" y2="18.0" stroke="#E5E5EA" stroke-width="1"/><text x="40" y="185.0" font-size="10" fill="#6B7280" text-anchor="end">7.6%</text><text x="40" y="144.0" font-size="10" fill="#6B7280" text-anchor="end">8.4%</text><text x="40" y="103.0" font-size="10" fill="#6B7280" text-anchor="end">9.3%</text><text x="40" y="62.0" font-size="10" fill="#6B7280" text-anchor="end">10.2%</text><text x="40" y="21.0" font-size="10" fill="#6B7280" text-anchor="end">11.1%</text><path d="M46.0,118.8 L125.1,145.7 L204.3,174.9 L283.4,92.0 L362.6,32.3 L441.7,64.2 L520.9,113.8 L600.0,99.9" fill="none" stroke="#FF5B5B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="46.0" cy="118.8" r="2.5" fill="#FF5B5B" /><circle cx="125.1" cy="145.7" r="2.5" fill="#FF5B5B" /><circle cx="204.3" cy="174.9" r="2.5" fill="#FF5B5B" /><circle cx="283.4" cy="92.0" r="2.5" fill="#FF5B5B" /><circle cx="362.6" cy="32.3" r="2.5" fill="#FF5B5B" /><circle cx="441.7" cy="64.2" r="2.5" fill="#FF5B5B" /><circle cx="520.9" cy="113.8" r="2.5" fill="#FF5B5B" /><circle cx="600.0" cy="99.9" r="2.5" fill="#FF5B5B" /><text x="46.0" y="198" font-size="10" fill="#6B7280" text-anchor="middle">2026-03-30</text><text x="125.1" y="198" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-06</text><text x="204.3" y="198" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-13</text><text x="283.4" y="198" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-20</text><text x="362.6" y="198" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-27</text><text x="441.7" y="198" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-04</text><text x="520.9" y="198" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-11</text><text x="600.0" y="198" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-18</text><g transform="translate(612,24)"><line x1="0" y1="0" x2="14" y2="0" stroke="#FF5B5B" stroke-width="2"/><text x="18" y="3" font-size="10" fill="#3C3C42">Approval rate</text></g></svg></div>
+<h2>Decline-mix trajectory</h2>
+<p class="section-intro">Share of total declines per week, top 5 reasons.</p>
+<table>
+<thead><tr><th>Reason</th><th class="num">2026-04-13</th><th class="num">2026-04-20</th><th class="num">2026-04-27</th><th class="num">2026-05-04</th><th class="num">2026-05-11</th><th class="num">2026-05-18</th></tr></thead>
+<tbody>
+<tr><td>FraudSuspectedFraud</td><td class="num">37.5%</td><td class="num">36.2%</td><td class="num">36.6%</td><td class="num">34.7%</td><td class="num">34.8%</td><td class="num">32.9%</td></tr>
+<tr><td>InsufficientFunds</td><td class="num">20.9%</td><td class="num">21.4%</td><td class="num">24.4%</td><td class="num">24.1%</td><td class="num">24.3%</td><td class="num">24.1%</td></tr>
+<tr><td>DoNotHonor</td><td class="num">24.6%</td><td class="num">22.9%</td><td class="num">21.5%</td><td class="num">22.4%</td><td class="num">22.8%</td><td class="num">24.1%</td></tr>
+<tr><td>ClosedAccountExpired</td><td class="num">6.4%</td><td class="num">6.5%</td><td class="num">5.9%</td><td class="num">6.4%</td><td class="num">5.7%</td><td class="num">6.6%</td></tr>
+<tr><td>ProviderFailures</td><td class="num">3.8%</td><td class="num">6.9%</td><td class="num">4.6%</td><td class="num">5.0%</td><td class="num">6.1%</td><td class="num">6.2%</td></tr>
+</tbody>
+</table>
+
+<div class="chart-wrap"><svg viewBox="0 0 720 240" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Decline-reason share of total declines — by week"><rect x="0" y="0" width="720" height="240" fill="#FFFFFF"/><text x="46" y="12" font-size="11" font-weight="600" fill="#3C3C42">Decline-reason share of total declines — by week</text><line x1="46" y1="202.0" x2="600" y2="202.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="156.0" x2="600" y2="156.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="110.0" x2="600" y2="110.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="64.0" x2="600" y2="64.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="18.0" x2="600" y2="18.0" stroke="#E5E5EA" stroke-width="1"/><text x="40" y="205.0" font-size="10" fill="#6B7280" text-anchor="end">2.1%</text><text x="40" y="159.0" font-size="10" fill="#6B7280" text-anchor="end">11.8%</text><text x="40" y="113.0" font-size="10" fill="#6B7280" text-anchor="end">21.5%</text><text x="40" y="67.0" font-size="10" fill="#6B7280" text-anchor="end">31.2%</text><text x="40" y="21.0" font-size="10" fill="#6B7280" text-anchor="end">40.9%</text><path d="M46.0,34.0 L156.8,40.2 L267.6,38.3 L378.4,47.3 L489.2,46.8 L600.0,55.8" fill="none" stroke="#FF5B5B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M46.0,112.8 L156.8,110.4 L267.6,96.2 L378.4,97.6 L489.2,96.7 L600.0,97.6" fill="none" stroke="#3C3C42" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M46.0,95.2 L156.8,103.3 L267.6,110.0 L378.4,105.7 L489.2,103.8 L600.0,97.6" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M46.0,181.7 L156.8,181.2 L267.6,184.0 L378.4,181.7 L489.2,185.0 L600.0,180.7" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M46.0,194.0 L156.8,179.3 L267.6,190.2 L378.4,188.3 L489.2,183.1 L600.0,182.6" fill="none" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="46.0" cy="34.0" r="2.5" fill="#FF5B5B" /><circle cx="156.8" cy="40.2" r="2.5" fill="#FF5B5B" /><circle cx="267.6" cy="38.3" r="2.5" fill="#FF5B5B" /><circle cx="378.4" cy="47.3" r="2.5" fill="#FF5B5B" /><circle cx="489.2" cy="46.8" r="2.5" fill="#FF5B5B" /><circle cx="600.0" cy="55.8" r="2.5" fill="#FF5B5B" /><circle cx="46.0" cy="112.8" r="2.5" fill="#3C3C42" /><circle cx="156.8" cy="110.4" r="2.5" fill="#3C3C42" /><circle cx="267.6" cy="96.2" r="2.5" fill="#3C3C42" /><circle cx="378.4" cy="97.6" r="2.5" fill="#3C3C42" /><circle cx="489.2" cy="96.7" r="2.5" fill="#3C3C42" /><circle cx="600.0" cy="97.6" r="2.5" fill="#3C3C42" /><circle cx="46.0" cy="95.2" r="2.5" fill="#16A34A" /><circle cx="156.8" cy="103.3" r="2.5" fill="#16A34A" /><circle cx="267.6" cy="110.0" r="2.5" fill="#16A34A" /><circle cx="378.4" cy="105.7" r="2.5" fill="#16A34A" /><circle cx="489.2" cy="103.8" r="2.5" fill="#16A34A" /><circle cx="600.0" cy="97.6" r="2.5" fill="#16A34A" /><circle cx="46.0" cy="181.7" r="2.5" fill="#F59E0B" /><circle cx="156.8" cy="181.2" r="2.5" fill="#F59E0B" /><circle cx="267.6" cy="184.0" r="2.5" fill="#F59E0B" /><circle cx="378.4" cy="181.7" r="2.5" fill="#F59E0B" /><circle cx="489.2" cy="185.0" r="2.5" fill="#F59E0B" /><circle cx="600.0" cy="180.7" r="2.5" fill="#F59E0B" /><circle cx="46.0" cy="194.0" r="2.5" fill="#6366F1" /><circle cx="156.8" cy="179.3" r="2.5" fill="#6366F1" /><circle cx="267.6" cy="190.2" r="2.5" fill="#6366F1" /><circle cx="378.4" cy="188.3" r="2.5" fill="#6366F1" /><circle cx="489.2" cy="183.1" r="2.5" fill="#6366F1" /><circle cx="600.0" cy="182.6" r="2.5" fill="#6366F1" /><text x="46.0" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-13</text><text x="156.8" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-20</text><text x="267.6" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-27</text><text x="378.4" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-04</text><text x="489.2" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-11</text><text x="600.0" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-18</text><g transform="translate(612,24)"><line x1="0" y1="0" x2="14" y2="0" stroke="#FF5B5B" stroke-width="2"/><text x="18" y="3" font-size="10" fill="#3C3C42">FraudSuspectedFraud</text></g><g transform="translate(612,40)"><line x1="0" y1="0" x2="14" y2="0" stroke="#3C3C42" stroke-width="2"/><text x="18" y="3" font-size="10" fill="#3C3C42">InsufficientFunds</text></g><g transform="translate(612,56)"><line x1="0" y1="0" x2="14" y2="0" stroke="#16A34A" stroke-width="2"/><text x="18" y="3" font-size="10" fill="#3C3C42">DoNotHonor</text></g><g transform="translate(612,72)"><line x1="0" y1="0" x2="14" y2="0" stroke="#F59E0B" stroke-width="2"/><text x="18" y="3" font-size="10" fill="#3C3C42">ClosedAccountExpired</text></g><g transform="translate(612,88)"><line x1="0" y1="0" x2="14" y2="0" stroke="#6366F1" stroke-width="2"/><text x="18" y="3" font-size="10" fill="#3C3C42">ProviderFailures</text></g></svg></div>
+<h2>Top-BIN decision tree status</h2>
+<p class="section-intro"><strong>2</strong> degrading, <strong>4</strong> watch, <strong>9</strong> healthy out of 15 top BINs (each ≥1% of this cohort's capture volume).</p>
+<div class="note"><strong>Signal glossary.</strong> <em>Approval drop this/prior wk</em> = approval rate fell ≥1.5pp WoW this week (or last). <em>Decline-mix shift</em> = one decline reason's share of total declines moved ≥5pp WoW. <em>New disputes arriving</em> = dispute signals (TC15/MC CB/TC40/RDR/Ethoca) attributed to this BIN. <em>Attempt volume rising</em> = auth attempts to this BIN rose ≥20% WoW. A BIN is DEGRADING when the approval-drop signal repeats two weeks in a row OR fires alongside any other signal; WATCH means a single signal has fired and needs another week of data to promote or clear.</div>
+<h3>Degrading BINs (2 BINs)</h3>
+<div class="table-scroll">
+<table class="table-dense">
+<thead><tr><th>BIN6</th><th>Issuer</th><th class="num">Share</th><th class="num">2026-04-27</th><th class="num">2026-05-04</th><th class="num">2026-05-11</th><th class="num">2026-05-18</th><th class="num">WoW slope</th><th>Trend</th><th>Signals</th></tr></thead>
+<tbody>
+<tr><td>403163</td><td>SUTTON BANK</td><td class="num">6.8%</td><td class="num">20.00%</td><td class="num">16.63%</td><td class="num">15.07%</td><td class="num">10.53%</td><td class="num"><span class="delta-negative">-4.54 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,2.0 L40.7,10.5 L79.3,14.5 L118.0,26.0" fill="none" stroke="#DC2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="26.0" r="2" fill="#DC2626"/></svg></span></td><td>Approval drop this wk; Approval drop prior wk</td></tr>
+<tr><td>533248</td><td>COMERICA BANK</td><td class="num">2.2%</td><td class="num">10.93%</td><td class="num">11.57%</td><td class="num">7.00%</td><td class="num">4.41%</td><td class="num"><span class="delta-negative">-2.59 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,4.1 L40.7,2.0 L79.3,17.3 L118.0,26.0" fill="none" stroke="#DC2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="26.0" r="2" fill="#DC2626"/></svg></span></td><td>Approval drop this wk; Approval drop prior wk</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Watch BINs (4 BINs)</h3>
+<div class="table-scroll">
+<table class="table-dense">
+<thead><tr><th>BIN6</th><th>Issuer</th><th class="num">Share</th><th class="num">2026-04-27</th><th class="num">2026-05-04</th><th class="num">2026-05-11</th><th class="num">2026-05-18</th><th class="num">WoW slope</th><th>Trend</th><th>Signals</th></tr></thead>
+<tbody>
+<tr><td>414740</td><td>JPMORGAN CHASE BANK N.A.</td><td class="num">1.4%</td><td class="num">14.62%</td><td class="num">9.76%</td><td class="num">16.18%</td><td class="num">10.61%</td><td class="num"><span class="delta-negative">-5.57 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,7.8 L40.7,26.0 L79.3,2.0 L118.0,22.8" fill="none" stroke="#B45309" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="22.8" r="2" fill="#B45309"/></svg></span></td><td>Approval drop this wk; New disputes arriving</td></tr>
+<tr><td>426684</td><td>JPMORGAN CHASE BANK N.A.</td><td class="num">1.8%</td><td class="num">5.26%</td><td class="num">8.39%</td><td class="num">9.78%</td><td class="num">5.68%</td><td class="num"><span class="delta-negative">-4.10 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,26.0 L40.7,9.4 L79.3,2.0 L118.0,23.8" fill="none" stroke="#B45309" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="23.8" r="2" fill="#B45309"/></svg></span></td><td>Approval drop this wk; New disputes arriving</td></tr>
+<tr><td>414720</td><td>JPMORGAN CHASE BANK N.A.</td><td class="num">1.6%</td><td class="num">7.89%</td><td class="num">4.84%</td><td class="num">4.48%</td><td class="num">2.86%</td><td class="num"><span class="delta-negative">-1.62 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,2.0 L40.7,16.6 L79.3,18.3 L118.0,26.0" fill="none" stroke="#B45309" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="26.0" r="2" fill="#B45309"/></svg></span></td><td>Approval drop this wk</td></tr>
+<tr><td>440393</td><td>SUTTON BANK</td><td class="num">1.1%</td><td class="num">25.50%</td><td class="num">15.52%</td><td class="num">15.22%</td><td class="num">24.32%</td><td class="num"><span class="delta-positive">+9.10 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,2.0 L40.7,25.3 L79.3,26.0 L118.0,4.8" fill="none" stroke="#B45309" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="4.8" r="2" fill="#B45309"/></svg></span></td><td>New disputes arriving</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Healthy BINs (9 BINs)</h3>
+<div class="table-scroll">
+<table class="table-dense">
+<thead><tr><th>BIN6</th><th>Issuer</th><th class="num">Share</th><th class="num">2026-04-27</th><th class="num">2026-05-04</th><th class="num">2026-05-11</th><th class="num">2026-05-18</th><th class="num">WoW slope</th><th>Trend</th><th>Signals</th></tr></thead>
+<tbody>
+<tr><td>514377</td><td>THE BANCORP BANK NATIONAL AS</td><td class="num">2.8%</td><td class="num">3.76%</td><td class="num">3.29%</td><td class="num">3.24%</td><td class="num">5.62%</td><td class="num"><span class="delta-positive">+2.38 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,20.8 L40.7,25.5 L79.3,26.0 L118.0,2.0" fill="none" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="2.0" r="2" fill="#16A34A"/></svg></span></td><td>—</td></tr>
+<tr><td>447227</td><td>STRIDE BANK, NATIONAL ASSOCI</td><td class="num">1.5%</td><td class="num">3.77%</td><td class="num">1.69%</td><td class="num">2.75%</td><td class="num">3.33%</td><td class="num"><span class="delta-positive">+0.58 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,2.0 L40.7,26.0 L79.3,13.8 L118.0,7.1" fill="none" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="7.1" r="2" fill="#16A34A"/></svg></span></td><td>—</td></tr>
+<tr><td>434256</td><td>WELLS FARGO BANK, NATIONAL A</td><td class="num">1.5%</td><td class="num">4.59%</td><td class="num">11.41%</td><td class="num">3.43%</td><td class="num">4.17%</td><td class="num"><span class="delta-positive">+0.74 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,22.5 L40.7,2.0 L79.3,26.0 L118.0,23.8" fill="none" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="23.8" r="2" fill="#16A34A"/></svg></span></td><td>Approval drop prior wk</td></tr>
+<tr><td>400022</td><td>NAVY FEDERAL CREDIT UNION</td><td class="num">1.5%</td><td class="num">11.73%</td><td class="num">5.56%</td><td class="num">7.10%</td><td class="num">15.38%</td><td class="num"><span class="delta-positive">+8.28 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,10.9 L40.7,26.0 L79.3,22.2 L118.0,2.0" fill="none" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="2.0" r="2" fill="#16A34A"/></svg></span></td><td>—</td></tr>
+<tr><td>444796</td><td>CREDIT ONE BANK, NATIONAL AS</td><td class="num">1.4%</td><td class="num">2.84%</td><td class="num">1.40%</td><td class="num">0.74%</td><td class="num">1.64%</td><td class="num"><span class="delta-positive">+0.90 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,2.0 L40.7,18.5 L79.3,26.0 L118.0,15.7" fill="none" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="15.7" r="2" fill="#16A34A"/></svg></span></td><td>—</td></tr>
+<tr><td>473702</td><td>WELLS FARGO BANK, NATIONAL A</td><td class="num">1.3%</td><td class="num">4.52%</td><td class="num">13.46%</td><td class="num">5.22%</td><td class="num">6.15%</td><td class="num"><span class="delta-positive">+0.93 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,26.0 L40.7,2.0 L79.3,24.1 L118.0,21.6" fill="none" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="21.6" r="2" fill="#16A34A"/></svg></span></td><td>Approval drop prior wk</td></tr>
+<tr><td>400895</td><td>THE BANCORP BANK, NATIONAL A</td><td class="num">1.2%</td><td class="num">1.46%</td><td class="num">1.63%</td><td class="num">2.60%</td><td class="num">4.76%</td><td class="num"><span class="delta-positive">+2.16 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,26.0 L40.7,24.8 L79.3,17.7 L118.0,2.0" fill="none" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="2.0" r="2" fill="#16A34A"/></svg></span></td><td>—</td></tr>
+<tr><td>413331</td><td>GREEN DOT BANK DBA BONNEVILL</td><td class="num">1.1%</td><td class="num">2.26%</td><td class="num">0.78%</td><td class="num">1.27%</td><td class="num">0.00%</td><td class="num"><span class="delta-negative">-1.27 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,2.0 L40.7,17.7 L79.3,12.5 L118.0,26.0" fill="none" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="26.0" r="2" fill="#16A34A"/></svg></span></td><td>—</td></tr>
+<tr><td>423223</td><td>THE BANCORP BANK, NATIONAL A</td><td class="num">1.0%</td><td class="num">2.10%</td><td class="num">1.40%</td><td class="num">1.06%</td><td class="num">0.00%</td><td class="num"><span class="delta-negative">-1.06 pp</span></td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,2.0 L40.7,10.0 L79.3,13.9 L118.0,26.0" fill="none" stroke="#16A34A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="26.0" r="2" fill="#16A34A"/></svg></span></td><td>—</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Dispute signals</h2>
+<table>
+<thead><tr><th>Category</th><th class="num">This week</th><th class="num">Full window</th></tr></thead>
+<tbody>
+<tr><td>Visa_TC15</td><td class="num">0</td><td class="num">15</td></tr>
+<tr><td>MC_CB</td><td class="num">0</td><td class="num">31</td></tr>
+<tr><td>Visa_TC40</td><td class="num">0</td><td class="num">207</td></tr>
+<tr><td>Visa_RDR</td><td class="num">9</td><td class="num">182</td></tr>
+<tr><td>Ethoca</td><td class="num">7</td><td class="num">147</td></tr>
+</tbody>
+</table>
+
+<h2>Auth-velocity covariate</h2>
+<p class="section-intro">Two views per Appendix A.4: the CAID-level rollup (does attempt volume to an issuer correlate with that issuer's approval rate on our MID?) and the merchant-level drill-down (is degradation MID-wide or descriptor-specific?). Both views show the last 4 weeks side-by-side for WoW comparison.</p>
+<h3>A.4 (i) — CAID × BIN/Issuer (top 8 BINs by attempt volume)</h3>
+<div class="table-scroll">
+<table class="table-dense">
+<thead><tr><th>BIN6</th><th>Issuer</th><th class="num">Total attempts</th><th class="num">Avg rate</th><th class="num">Att 2026-04-27</th><th class="num">Att 2026-05-04</th><th class="num">Att 2026-05-11</th><th class="num">Att 2026-05-18</th><th>Rate trend</th></tr></thead>
+<tbody>
+<tr><td>403163</td><td>SUTTON BANK</td><td class="num">3,183</td><td class="num">15.56%</td><td class="num">1,095</td><td class="num">890</td><td class="num">856</td><td class="num">342</td><td>20.0% → 16.6% → 15.1% → 10.5%</td></tr>
+<tr><td>514377</td><td>THE BANCORP BANK NATIONAL</td><td class="num">1,206</td><td class="num">3.98%</td><td class="num">372</td><td class="num">334</td><td class="num">340</td><td class="num">160</td><td>3.8% → 3.3% → 3.2% → 5.6%</td></tr>
+<tr><td>533248</td><td>COMERICA BANK</td><td class="num">838</td><td class="num">8.48%</td><td class="num">302</td><td class="num">268</td><td class="num">200</td><td class="num">68</td><td>10.9% → 11.6% → 7.0% → 4.4%</td></tr>
+<tr><td>447227</td><td>STRIDE BANK, NATIONAL ASS</td><td class="num">658</td><td class="num">2.88%</td><td class="num">239</td><td class="num">177</td><td class="num">182</td><td class="num">60</td><td>3.8% → 1.7% → 2.8% → 3.3%</td></tr>
+<tr><td>426684</td><td>JPMORGAN CHASE BANK N.A.</td><td class="num">646</td><td class="num">7.28%</td><td class="num">190</td><td class="num">143</td><td class="num">225</td><td class="num">88</td><td>5.3% → 8.4% → 9.8% → 5.7%</td></tr>
+<tr><td>434256</td><td>WELLS FARGO BANK, NATIONA</td><td class="num">627</td><td class="num">5.90%</td><td class="num">196</td><td class="num">184</td><td class="num">175</td><td class="num">72</td><td>4.6% → 11.4% → 3.4% → 4.2%</td></tr>
+<tr><td>414720</td><td>JPMORGAN CHASE BANK N.A.</td><td class="num">607</td><td class="num">5.02%</td><td class="num">190</td><td class="num">124</td><td class="num">223</td><td class="num">70</td><td>7.9% → 4.8% → 4.5% → 2.9%</td></tr>
+<tr><td>400022</td><td>NAVY FEDERAL CREDIT UNION</td><td class="num">557</td><td class="num">9.94%</td><td class="num">179</td><td class="num">144</td><td class="num">169</td><td class="num">65</td><td>11.7% → 5.6% → 7.1% → 15.4%</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>A.4 (ii) — CAID × merchant × BIN/Issuer drill-down</h3>
+<p class="section-intro">Shows attempts per (merchant, BIN) pair for the top BINs above. If a single BIN is degrading and the drill-down shows ALL merchants on the MID seeing the same approval-rate hit, the issuer is responding to the MID itself. If only one merchant on the MID is affected, the issuer is responding to that merchant's descriptor / behavior — the MID is fine.</p>
+<div class="table-scroll">
+<table class="table-dense">
+<thead><tr><th>BIN6</th><th>Issuer</th><th>Merchant DBA</th><th class="num">This wk attempts</th><th class="num">This wk rate</th><th class="num">Prior wk attempts</th><th class="num">Prior wk rate</th></tr></thead>
+<tbody>
+<tr><td>403163</td><td>SUTTON BANK</td><td>Explodely LLC</td><td class="num">281</td><td class="num">12.1%</td><td class="num">729</td><td class="num">17.4%</td></tr>
+<tr><td>403163</td><td>SUTTON BANK</td><td>Nymbus LLC</td><td class="num">21</td><td class="num">9.5%</td><td class="num">26</td><td class="num">0.0%</td></tr>
+<tr><td>403163</td><td>SUTTON BANK</td><td>Luxury Confidence</td><td class="num">9</td><td class="num">0.0%</td><td class="num">18</td><td class="num">0.0%</td></tr>
+<tr><td>403163</td><td>SUTTON BANK</td><td>Drivse</td><td class="num">5</td><td class="num">0.0%</td><td class="num">9</td><td class="num">0.0%</td></tr>
+<tr><td>514377</td><td>THE BANCORP BANK NATIO</td><td>Explodely LLC</td><td class="num">144</td><td class="num">6.2%</td><td class="num">315</td><td class="num">3.5%</td></tr>
+<tr><td>514377</td><td>THE BANCORP BANK NATIO</td><td>Tactical Promo</td><td class="num">5</td><td class="num">0.0%</td><td class="num">5</td><td class="num">0.0%</td></tr>
+<tr><td>514377</td><td>THE BANCORP BANK NATIO</td><td>Nymbus LLC</td><td class="num">4</td><td class="num">0.0%</td><td class="num">2</td><td class="num">0.0%</td></tr>
+<tr><td>514377</td><td>THE BANCORP BANK NATIO</td><td>RealDefense</td><td class="num">2</td><td class="num">0.0%</td><td class="num">3</td><td class="num">0.0%</td></tr>
+<tr><td>533248</td><td>COMERICA BANK</td><td>Explodely LLC</td><td class="num">48</td><td class="num">6.2%</td><td class="num">157</td><td class="num">7.6%</td></tr>
+<tr><td>533248</td><td>COMERICA BANK</td><td>Herbal Groups</td><td class="num">3</td><td class="num">0.0%</td><td class="num">15</td><td class="num">0.0%</td></tr>
+<tr><td>533248</td><td>COMERICA BANK</td><td>Luxury Confidence</td><td class="num">4</td><td class="num">0.0%</td><td class="num">11</td><td class="num">0.0%</td></tr>
+<tr><td>533248</td><td>COMERICA BANK</td><td>Nymbus LLC</td><td class="num">3</td><td class="num">0.0%</td><td class="num">3</td><td class="num">0.0%</td></tr>
+<tr><td>447227</td><td>STRIDE BANK, NATIONAL </td><td>Explodely LLC</td><td class="num">47</td><td class="num">4.3%</td><td class="num">150</td><td class="num">2.7%</td></tr>
+<tr><td>447227</td><td>STRIDE BANK, NATIONAL </td><td>RealDefense</td><td class="num">2</td><td class="num">0.0%</td><td class="num">5</td><td class="num">20.0%</td></tr>
+<tr><td>447227</td><td>STRIDE BANK, NATIONAL </td><td>Luxury Confidence</td><td class="num">1</td><td class="num">0.0%</td><td class="num">3</td><td class="num">0.0%</td></tr>
+<tr><td>447227</td><td>STRIDE BANK, NATIONAL </td><td>Westgate Resort Mortgage</td><td class="num">0</td><td class="num">-</td><td class="num">3</td><td class="num">0.0%</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Vs baseline (Appendix A.5)</h2>
+<p class="section-intro">Baseline = the cohort's normal-state approval rate over the 90 days before experiment launch, locked at launch and saved to <code>docs/baseline/&lt;launch-date&gt;_cohort_baseline.csv</code>. The columns below compare this week's top-BIN performance against that baseline so a 1.5pp WoW drop can be interpreted in context (e.g. "1.5pp below last week AND 5pp below baseline" reads differently than "1.5pp below last week, still at baseline").</p>
+<div class="note"><strong>Sample limitation.</strong> No baseline exists for this CAID (937700006246) since it is a live merchant CAID and the experiment has not run. The sample uses the earliest 4 weeks of the available window as a synthetic baseline (see <code>pivot_A5_937700006246.xlsx</code>). The table below shows the structure; production data will populate from the locked A.5 CSV.</div>
+<div class="table-scroll">
+<table class="table-dense">
+<thead><tr><th>BIN6</th><th>Issuer</th><th class="num">Share</th><th class="num">Baseline rate</th><th class="num">This week rate</th><th class="num">Δ vs baseline</th></tr></thead>
+<tbody>
+<tr><td>403163</td><td>SUTTON BANK</td><td class="num">6.8%</td><td class="num">14.24%</td><td class="num">10.53%</td><td class="num"><span class="delta-negative">-3.71 pp</span></td></tr>
+<tr><td>514377</td><td>THE BANCORP BANK NATIONAL AS</td><td class="num">2.8%</td><td class="num">5.74%</td><td class="num">5.62%</td><td class="num"><span class="delta-negative">-0.12 pp</span></td></tr>
+<tr><td>533248</td><td>COMERICA BANK</td><td class="num">2.2%</td><td class="num">9.93%</td><td class="num">4.41%</td><td class="num"><span class="delta-negative">-5.52 pp</span></td></tr>
+<tr><td>426684</td><td>JPMORGAN CHASE BANK N.A.</td><td class="num">1.8%</td><td class="num">5.68%</td><td class="num">5.68%</td><td class="num"><span class="delta-positive">+0.00 pp</span></td></tr>
+<tr><td>414720</td><td>JPMORGAN CHASE BANK N.A.</td><td class="num">1.6%</td><td class="num">6.97%</td><td class="num">2.86%</td><td class="num"><span class="delta-negative">-4.11 pp</span></td></tr>
+<tr><td>447227</td><td>STRIDE BANK, NATIONAL ASSOCI</td><td class="num">1.5%</td><td class="num">2.12%</td><td class="num">3.33%</td><td class="num"><span class="delta-positive">+1.21 pp</span></td></tr>
+<tr><td>434256</td><td>WELLS FARGO BANK, NATIONAL A</td><td class="num">1.5%</td><td class="num">5.65%</td><td class="num">4.17%</td><td class="num"><span class="delta-negative">-1.48 pp</span></td></tr>
+<tr><td>400022</td><td>NAVY FEDERAL CREDIT UNION</td><td class="num">1.5%</td><td class="num">6.29%</td><td class="num">15.38%</td><td class="num"><span class="delta-positive">+9.09 pp</span></td></tr>
+<tr><td>414740</td><td>JPMORGAN CHASE BANK N.A.</td><td class="num">1.4%</td><td class="num">1.03%</td><td class="num">10.61%</td><td class="num"><span class="delta-positive">+9.58 pp</span></td></tr>
+<tr><td>444796</td><td>CREDIT ONE BANK, NATIONAL AS</td><td class="num">1.4%</td><td class="num">2.26%</td><td class="num">1.64%</td><td class="num"><span class="delta-negative">-0.62 pp</span></td></tr>
+<tr><td>473702</td><td>WELLS FARGO BANK, NATIONAL A</td><td class="num">1.3%</td><td class="num">5.46%</td><td class="num">6.15%</td><td class="num"><span class="delta-positive">+0.69 pp</span></td></tr>
+<tr><td>400895</td><td>THE BANCORP BANK, NATIONAL A</td><td class="num">1.2%</td><td class="num">2.03%</td><td class="num">4.76%</td><td class="num"><span class="delta-positive">+2.73 pp</span></td></tr>
+<tr><td>413331</td><td>GREEN DOT BANK DBA BONNEVILL</td><td class="num">1.1%</td><td class="num">1.15%</td><td class="num">0.00%</td><td class="num"><span class="delta-negative">-1.15 pp</span></td></tr>
+<tr><td>440393</td><td>SUTTON BANK</td><td class="num">1.1%</td><td class="num">14.89%</td><td class="num">24.32%</td><td class="num"><span class="delta-positive">+9.43 pp</span></td></tr>
+<tr><td>423223</td><td>THE BANCORP BANK, NATIONAL A</td><td class="num">1.0%</td><td class="num">0.36%</td><td class="num">0.00%</td><td class="num"><span class="delta-negative">-0.36 pp</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Cooldown recovery (Appendix A.6)</h2>
+<p class="section-intro">When a MID is pulled and reintroduced, Appendix A.6 compares per-BIN approval rate in the 7 days pre-pull vs the 7 days post-reintro and classifies each top BIN as RECOVERED / PARTIAL / NOT_RECOVERED. If &ge;50% of top BINs are RECOVERED, the cohort-level call is "reintroduce at 50/50 split"; otherwise pull again and extend rest by 15 days.</p>
+<div class="note">No pull / reintroduction event has occurred in the window for this CAID, so this section is empty. Structure preview: a per-BIN table (pre rate / post rate / Δ / status) plus a cohort rollup (% RECOVERED) drives the reintroduce-vs-extend decision. See <code>pivot_A6_937700006246.xlsx</code> for the format the operator pastes in.</div>
+<h2>Control-arm comparison (TEST vs CONTROL)</h2>
+<p class="section-intro">The experiment is a 50/50 split on in-scope CIT 1st-attempt Visa+MC credit-rail traffic: half routes to the experiment MID (TEST), the other half continues through the merchant's default cascade (CONTROL). The decision tree above is walked TWICE every week — once for each arm. If both arms degrade together, the cause is upstream of the experiment (merchant- or issuer-portfolio-wide). If only the TEST arm degrades, the new-MID hypothesis is directly supported. This comparison is the key interpretive frame for every pull decision.</p>
+<div class="note"><strong>Sample limitation.</strong> This sample report is generated from a single live CAID (937700006246) where no experiment routing is active, so only one arm of data exists. In production, mid_weekly_monitor.py will split the A1–A4 CSVs by <code>experiment_arm</code> tag and the table below will show TEST and CONTROL side-by-side with a delta column. Structure shown for reference.</div>
+<table>
+<thead><tr><th>Metric</th><th class="num">TEST arm</th><th class="num">CONTROL arm</th><th class="num">Delta (TEST − CONTROL)</th></tr></thead>
+<tbody>
+<tr><td>Approval rate this week</td><td class="num">9.33%</td><td class="num">awaiting CONTROL tagging</td><td class="num">—</td></tr>
+<tr><td>Auths this week</td><td class="num">4,672</td><td class="num">awaiting CONTROL tagging</td><td class="num">—</td></tr>
+<tr><td>WoW change (pp)</td><td class="num">+0.30 pp</td><td class="num">awaiting CONTROL tagging</td><td class="num">—</td></tr>
+<tr><td>Degrading top BINs</td><td class="num">2 / 15 (13.3%)</td><td class="num">awaiting CONTROL tagging</td><td class="num">—</td></tr>
+<tr><td>Dispute signals this week</td><td class="num">16</td><td class="num">awaiting CONTROL tagging</td><td class="num">—</td></tr>
+</tbody>
+</table>
+
+<h2>Decision this week</h2>
+<div class="headline-card"><span class="pill pill-continue">CONTINUE</span> &nbsp; 2/15 top BINs flagged degrading (13.3%); majority threshold (50%) <strong>not reached</strong>.</div>
+<h2>Watch list for next week</h2>
+<p class="section-intro">BINs to track most closely going into next Monday's review, with their last-4-week approval-rate trajectory.</p>
+<div class="table-scroll">
+<table class="table-dense">
+<thead><tr><th>BIN6</th><th>Issuer</th><th>Status</th><th class="num">Share</th><th>Last 4 weeks approval rate</th><th>What promotes to DEGRADING</th></tr></thead>
+<tbody>
+<tr><td>403163</td><td>SUTTON BANK</td><td><span class="pill pill-degrading">degrading</span></td><td class="num">6.8%</td><td>20.00% → 16.63% → 15.07% → 10.53%</td><td>Already degrading — watch for further drop or recovery</td></tr>
+<tr><td>533248</td><td>COMERICA BANK</td><td><span class="pill pill-degrading">degrading</span></td><td class="num">2.2%</td><td>10.93% → 11.57% → 7.00% → 4.41%</td><td>Already degrading — watch for further drop or recovery</td></tr>
+<tr><td>414740</td><td>JPMORGAN CHASE BANK </td><td><span class="pill pill-watch">watch</span></td><td class="num">1.4%</td><td>14.62% → 9.76% → 16.18% → 10.61%</td><td>approval drop must repeat next week to flag DEGRADING; new disputes arriving — watch for approval-rate follow-through</td></tr>
+<tr><td>426684</td><td>JPMORGAN CHASE BANK </td><td><span class="pill pill-watch">watch</span></td><td class="num">1.8%</td><td>5.26% → 8.39% → 9.78% → 5.68%</td><td>approval drop must repeat next week to flag DEGRADING; new disputes arriving — watch for approval-rate follow-through</td></tr>
+<tr><td>414720</td><td>JPMORGAN CHASE BANK </td><td><span class="pill pill-watch">watch</span></td><td class="num">1.6%</td><td>7.89% → 4.84% → 4.48% → 2.86%</td><td>approval drop must repeat next week to flag DEGRADING</td></tr>
+<tr><td>440393</td><td>SUTTON BANK</td><td><span class="pill pill-watch">watch</span></td><td class="num">1.1%</td><td>25.50% → 15.52% → 15.22% → 24.32%</td><td>new disputes arriving — watch for approval-rate follow-through</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="footer">
+<div>Generated 2026-05-22 by <strong>MIDical Lab</strong> · FlexFactor</div>
+<div>CAID 937700006246</div>
+</div>
+</div>
+</div>
+</body>
+</html>

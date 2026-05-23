@@ -1,0 +1,14 @@
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor noise
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Don't track these — they're synthesized on demand
+*.pdf
+*.tmp

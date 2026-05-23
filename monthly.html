@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIDical Lab — Monthly Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --coral: #FF5B5B;
+  --coral-dark: #E84545;
+  --charcoal: #3C3C42;
+  --charcoal-soft: #5A5A63;
+  --bg: #F8F8F8;
+  --card: #FFFFFF;
+  --border: #E5E5EA;
+  --muted: #6B7280;
+  --positive: #16A34A;
+  --positive-bg: #D1FAE5;
+  --negative: #DC2626;
+  --negative-bg: #FEE2E2;
+  --warning: #B45309;
+  --warning-bg: #FEF3C7;
+}
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--charcoal);
+  margin: 0;
+  padding: 32px 16px;
+  line-height: 1.55;
+  font-size: 14px;
+}
+.report {
+  max-width: 1120px;
+  margin: 0 auto;
+  background: var(--card);
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+.brand-bar {
+  height: 5px;
+  background: linear-gradient(90deg, var(--coral) 0%, var(--coral-dark) 100%);
+}
+.report-body { padding: 36px 44px 44px; }
+.report-header { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 24px; }
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin-bottom: 8px;
+}
+h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--charcoal);
+  margin: 0 0 10px;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+h2 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--charcoal);
+  margin: 32px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: -0.005em;
+}
+h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--charcoal-soft);
+  margin: 22px 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+p { margin: 8px 0 12px; }
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.meta-item .label {
+  font-weight: 600;
+  color: var(--charcoal);
+  margin-right: 5px;
+}
+.meta-item code {
+  background: var(--bg);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--charcoal);
+  border: 1px solid var(--border);
+}
+.headline-card {
+  background: var(--bg);
+  border-left: 4px solid var(--coral);
+  padding: 18px 22px;
+  margin: 14px 0 22px;
+  border-radius: 0 6px 6px 0;
+  font-size: 15px;
+}
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+  margin: 18px 0 8px;
+}
+.kpi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.kpi-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 700;
+}
+.kpi-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--charcoal);
+  margin-top: 6px;
+  letter-spacing: -0.01em;
+}
+.kpi-value.positive { color: var(--positive); }
+.kpi-value.negative { color: var(--negative); }
+.kpi-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 16px;
+  font-size: 13px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+thead th {
+  background: var(--charcoal);
+  color: #FFFFFF;
+  font-weight: 600;
+  text-align: left;
+  padding: 9px 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--charcoal);
+  white-space: nowrap;
+}
+thead th.num { text-align: right; }
+tbody td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tbody td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+tbody td.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+}
+tbody tr:nth-child(even) td { background: #FAFAFB; }
+tbody tr:last-child td { border-bottom: none; }
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin: 12px 0 16px;
+  background: var(--card);
+}
+.table-scroll > table {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  min-width: max-content;
+}
+table.table-dense { font-size: 12px; }
+table.table-dense thead th { padding: 7px 9px; font-size: 10px; letter-spacing: 0.04em; }
+table.table-dense tbody td { padding: 6px 9px; }
+table.table-dense tbody td.num { font-size: 12px; }
+.chart-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px 6px;
+  margin: 12px 0 18px;
+  overflow: hidden;
+}
+.chart-wrap svg { width: 100%; height: auto; display: block; }
+.sparkline-cell svg { display: inline-block; }
+.pill {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 11px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.pill-degrading { background: var(--negative-bg); color: #B91C1C; }
+.pill-watch     { background: var(--warning-bg); color: var(--warning); }
+.pill-healthy   { background: var(--positive-bg); color: #047857; }
+.pill-pull      { background: var(--negative-bg); color: #B91C1C; }
+.pill-continue  { background: var(--positive-bg); color: #047857; }
+.delta-positive { color: var(--positive); font-weight: 600; }
+.delta-negative { color: var(--negative); font-weight: 600; }
+.delta-zero     { color: var(--muted); }
+.note {
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--charcoal-soft);
+  margin: 14px 0;
+  border-left: 3px solid var(--border);
+}
+.section-intro { color: var(--charcoal-soft); margin: 4px 0 12px; }
+.recs { padding-left: 22px; }
+.recs li { margin: 8px 0; }
+.footer {
+  border-top: 1px solid var(--border);
+  margin-top: 36px;
+  padding-top: 14px;
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+@media print {
+  body { background: white; padding: 0; font-size: 11px; }
+  .report { box-shadow: none; border-radius: 0; }
+  .report-body { padding: 24px 28px; }
+  thead th { background: #3C3C42 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+<div class="report">
+<div class="brand-bar"></div>
+<div class="report-body">
+<div class="report-header">
+<div class="eyebrow">Monthly deep dive</div>
+<h1>MIDical Lab — Monthly Deep Dive</h1>
+<div class="meta"><div class="meta-item"><span class="label">CAID:</span><code>937700006246</code></div><div class="meta-item"><span class="label">Window covered:</span>last 9 weeks ending 2026-05-22</div><div class="meta-item"><span class="label">Source CSVs:</span><code>MIDical Lab/output/2026-05-20/</code></div></div>
+</div>
+<h2>Phase transitions</h2>
+<div class="kpi-row">
+<div class="kpi-card"><div class="kpi-label">Earliest week</div><div class="kpi-value">8.17%</div><div class="kpi-sub">wk of 2026-03-23</div></div>
+<div class="kpi-card"><div class="kpi-label">Peak observed</div><div class="kpi-value positive">10.79%</div><div class="kpi-sub">wk of 2026-04-27</div></div>
+<div class="kpi-card"><div class="kpi-label">Trough observed</div><div class="kpi-value negative">7.71%</div><div class="kpi-sub">wk of 2026-04-13</div></div>
+<div class="kpi-card"><div class="kpi-label">Current week</div><div class="kpi-value">9.33%</div><div class="kpi-sub">wk of 2026-05-18</div></div>
+</div>
+<div class="note">No pull events fired during this window — all weekly decisions for this CAID were <strong>CONTINUE</strong>.</div>
+<div class="chart-wrap"><svg viewBox="0 0 720 260" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Approval rate over the full window (with peak / trough)"><rect x="0" y="0" width="720" height="260" fill="#FFFFFF"/><text x="46" y="12" font-size="11" font-weight="600" fill="#3C3C42">Approval rate over the full window (with peak / trough)</text><line x1="46" y1="222.0" x2="600" y2="222.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="171.0" x2="600" y2="171.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="120.0" x2="600" y2="120.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="69.0" x2="600" y2="69.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="18.0" x2="600" y2="18.0" stroke="#E5E5EA" stroke-width="1"/><text x="40" y="225.0" font-size="10" fill="#6B7280" text-anchor="end">7.6%</text><text x="40" y="174.0" font-size="10" fill="#6B7280" text-anchor="end">8.4%</text><text x="40" y="123.0" font-size="10" fill="#6B7280" text-anchor="end">9.3%</text><text x="40" y="72.0" font-size="10" fill="#6B7280" text-anchor="end">10.2%</text><text x="40" y="21.0" font-size="10" fill="#6B7280" text-anchor="end">11.1%</text><line x1="392.2" y1="18" x2="392.2" y2="222" stroke="#16A34A" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/><text x="392.2" y="14" font-size="10" font-weight="600" fill="#16A34A" text-anchor="middle">peak 10.79%</text><line x1="253.8" y1="18" x2="253.8" y2="222" stroke="#DC2626" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/><text x="253.8" y="14" font-size="10" font-weight="600" fill="#DC2626" text-anchor="middle">trough 7.71%</text><path d="M46.0,186.6 L115.2,143.4 L184.5,176.8 L253.8,213.1 L323.0,110.0 L392.2,35.7 L461.5,75.5 L530.8,137.1 L600.0,119.8" fill="none" stroke="#FF5B5B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="46.0" cy="186.6" r="2.5" fill="#FF5B5B" /><circle cx="115.2" cy="143.4" r="2.5" fill="#FF5B5B" /><circle cx="184.5" cy="176.8" r="2.5" fill="#FF5B5B" /><circle cx="253.8" cy="213.1" r="2.5" fill="#FF5B5B" /><circle cx="323.0" cy="110.0" r="2.5" fill="#FF5B5B" /><circle cx="392.2" cy="35.7" r="2.5" fill="#FF5B5B" /><circle cx="461.5" cy="75.5" r="2.5" fill="#FF5B5B" /><circle cx="530.8" cy="137.1" r="2.5" fill="#FF5B5B" /><circle cx="600.0" cy="119.8" r="2.5" fill="#FF5B5B" /><text x="46.0" y="238" font-size="10" fill="#6B7280" text-anchor="middle">2026-03-23</text><text x="115.2" y="238" font-size="10" fill="#6B7280" text-anchor="middle">2026-03-30</text><text x="184.5" y="238" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-06</text><text x="253.8" y="238" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-13</text><text x="323.0" y="238" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-20</text><text x="392.2" y="238" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-27</text><text x="461.5" y="238" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-04</text><text x="530.8" y="238" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-11</text><text x="600.0" y="238" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-18</text><g transform="translate(612,24)"><line x1="0" y1="0" x2="14" y2="0" stroke="#FF5B5B" stroke-width="2"/><text x="18" y="3" font-size="10" fill="#3C3C42">Cohort approval rate</text></g></svg></div>
+<h2>Degraded BINs this month</h2>
+<p class="section-intro">Per-BIN approval-rate trajectory for every BIN that hit DEGRADING or WATCH at any point in the window. (In a single weekly run we only see the latest snapshot; in production a real monthly view would accumulate per-BIN status flags across all 4 weekly runs. The latest snapshot below shows where things stand right now.)</p>
+<div class="table-scroll">
+<table class="table-dense">
+<thead><tr><th>BIN6</th><th>Issuer</th><th>Status</th><th class="num">Share</th><th class="num">2026-03-30</th><th class="num">2026-04-06</th><th class="num">2026-04-13</th><th class="num">2026-04-20</th><th class="num">2026-04-27</th><th class="num">2026-05-04</th><th class="num">2026-05-11</th><th class="num">2026-05-18</th><th>Trend</th><th class="num">Disputes</th><th class="num">Net WoW change</th></tr></thead>
+<tbody>
+<tr><td>403163</td><td>SUTTON BANK</td><td><span class="pill pill-degrading">degrading</span></td><td class="num">6.8%</td><td class="num">13.05%</td><td class="num">16.82%</td><td class="num">15.21%</td><td class="num">13.86%</td><td class="num">20.00%</td><td class="num">16.63%</td><td class="num">15.07%</td><td class="num">10.53%</td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,19.6 L18.6,10.1 L35.1,14.1 L51.7,17.6 L68.3,2.0 L84.9,10.5 L101.4,14.5 L118.0,26.0" fill="none" stroke="#DC2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="26.0" r="2" fill="#DC2626"/></svg></span></td><td class="num">39</td><td class="num"><span class="delta-negative">-2.52 pp</span></td></tr>
+<tr><td>533248</td><td>COMERICA BANK</td><td><span class="pill pill-degrading">degrading</span></td><td class="num">2.2%</td><td class="num">10.85%</td><td class="num">12.81%</td><td class="num">7.43%</td><td class="num">7.22%</td><td class="num">10.93%</td><td class="num">11.57%</td><td class="num">7.00%</td><td class="num">4.41%</td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,7.6 L18.6,2.0 L35.1,17.4 L51.7,18.0 L68.3,7.4 L84.9,5.5 L101.4,18.6 L118.0,26.0" fill="none" stroke="#DC2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="26.0" r="2" fill="#DC2626"/></svg></span></td><td class="num">10</td><td class="num"><span class="delta-negative">-6.44 pp</span></td></tr>
+<tr><td>414740</td><td>JPMORGAN CHASE BANK N.</td><td><span class="pill pill-watch">watch</span></td><td class="num">1.4%</td><td class="num">0.99%</td><td class="num">1.05%</td><td class="num">0.93%</td><td class="num">7.29%</td><td class="num">14.62%</td><td class="num">9.76%</td><td class="num">16.18%</td><td class="num">10.61%</td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,25.9 L18.6,25.8 L35.1,26.0 L51.7,16.0 L68.3,4.5 L84.9,12.1 L101.4,2.0 L118.0,10.8" fill="none" stroke="#B45309" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="10.8" r="2" fill="#B45309"/></svg></span></td><td class="num">6</td><td class="num"><span class="delta-positive">+9.62 pp</span></td></tr>
+<tr><td>426684</td><td>JPMORGAN CHASE BANK N.</td><td><span class="pill pill-watch">watch</span></td><td class="num">1.8%</td><td class="num">8.33%</td><td class="num">3.12%</td><td class="num">6.77%</td><td class="num">4.73%</td><td class="num">5.26%</td><td class="num">8.39%</td><td class="num">9.78%</td><td class="num">5.68%</td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,7.2 L18.6,26.0 L35.1,12.8 L51.7,20.2 L68.3,18.3 L84.9,7.0 L101.4,2.0 L118.0,16.8" fill="none" stroke="#B45309" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="16.8" r="2" fill="#B45309"/></svg></span></td><td class="num">10</td><td class="num"><span class="delta-negative">-2.65 pp</span></td></tr>
+<tr><td>414720</td><td>JPMORGAN CHASE BANK N.</td><td><span class="pill pill-watch">watch</span></td><td class="num">1.6%</td><td class="num">6.78%</td><td class="num">3.54%</td><td class="num">5.48%</td><td class="num">6.77%</td><td class="num">7.89%</td><td class="num">4.84%</td><td class="num">4.48%</td><td class="num">2.86%</td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,7.3 L18.6,22.8 L35.1,13.5 L51.7,7.3 L68.3,2.0 L84.9,16.6 L101.4,18.3 L118.0,26.0" fill="none" stroke="#B45309" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="26.0" r="2" fill="#B45309"/></svg></span></td><td class="num">7</td><td class="num"><span class="delta-negative">-3.92 pp</span></td></tr>
+<tr><td>440393</td><td>SUTTON BANK</td><td><span class="pill pill-watch">watch</span></td><td class="num">1.1%</td><td class="num">20.83%</td><td class="num">16.44%</td><td class="num">13.16%</td><td class="num">15.28%</td><td class="num">25.50%</td><td class="num">15.52%</td><td class="num">15.22%</td><td class="num">24.32%</td><td><span class="sparkline-cell"><svg viewBox="0 0 120 28" width="120" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><path d="M2.0,11.1 L18.6,19.6 L35.1,26.0 L51.7,21.9 L68.3,2.0 L84.9,21.4 L101.4,22.0 L118.0,4.3" fill="none" stroke="#B45309" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="118.0" cy="4.3" r="2" fill="#B45309"/></svg></span></td><td class="num">12</td><td class="num"><span class="delta-positive">+3.49 pp</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>Where things stand now</h3>
+<div class="kpi-row">
+<div class="kpi-card"><div class="kpi-label">Degrading BINs</div><div class="kpi-value negative">2</div><div class="kpi-sub">need next-week trajectory check</div></div>
+<div class="kpi-card"><div class="kpi-label">Watch BINs</div><div class="kpi-value">4</div><div class="kpi-sub">single-signal firings</div></div>
+<div class="kpi-card"><div class="kpi-label">Healthy BINs</div><div class="kpi-value positive">9</div><div class="kpi-sub">stable within WoW variance</div></div>
+<div class="kpi-card"><div class="kpi-label">MID decision this week</div><div class="kpi-value positive">Continue</div><div class="kpi-sub">13.3% degrading (pull at 50%)</div></div>
+</div>
+<h2>Dispute-level hypothesis — preliminary read</h2>
+<p class="section-intro">This monthly deep dive uses a single live CAID for format demonstration; cohort comparison is not possible from one CAID. In the production experiment this section compares LOW (937700011015) vs MED (937700011639) — which cohort degraded first, at what week, and at what dispute exposure. With only one CAID in the sample we report this CAID's standalone exposure:</p>
+<table>
+<thead><tr><th>Category</th><th class="num">Count over window</th></tr></thead>
+<tbody>
+<tr><td>Visa_TC15</td><td class="num">15</td></tr>
+<tr><td>MC_CB</td><td class="num">31</td></tr>
+<tr><td>Visa_TC40</td><td class="num">207</td></tr>
+<tr><td>Visa_RDR</td><td class="num">182</td></tr>
+<tr><td>Ethoca</td><td class="num">147</td></tr>
+</tbody>
+</table>
+
+<div class="chart-wrap"><svg viewBox="0 0 720 240" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dispute arrivals by category, by week"><rect x="0" y="0" width="720" height="240" fill="#FFFFFF"/><text x="46" y="12" font-size="11" font-weight="600" fill="#3C3C42">Dispute arrivals by category, by week</text><line x1="46" y1="202.0" x2="600" y2="202.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="156.0" x2="600" y2="156.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="110.0" x2="600" y2="110.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="64.0" x2="600" y2="64.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="18.0" x2="600" y2="18.0" stroke="#E5E5EA" stroke-width="1"/><text x="40" y="205.0" font-size="10" fill="#6B7280" text-anchor="end">0</text><text x="40" y="159.0" font-size="10" fill="#6B7280" text-anchor="end">23</text><text x="40" y="113.0" font-size="10" fill="#6B7280" text-anchor="end">46</text><text x="40" y="67.0" font-size="10" fill="#6B7280" text-anchor="end">69</text><text x="40" y="21.0" font-size="10" fill="#6B7280" text-anchor="end">92</text><rect x="46.0" y="192.0" width="56.2" height="10.0" fill="#FF5B5B"/><rect x="46.0" y="180.1" width="56.2" height="11.9" fill="#3C3C42"/><rect x="46.0" y="116.4" width="56.2" height="63.7" fill="#F59E0B"/><rect x="46.0" y="68.6" width="56.2" height="47.8" fill="#6366F1"/><rect x="46.0" y="46.7" width="56.2" height="21.9" fill="#16A34A"/><rect x="108.2" y="194.0" width="56.2" height="8.0" fill="#FF5B5B"/><rect x="108.2" y="186.1" width="56.2" height="8.0" fill="#3C3C42"/><rect x="108.2" y="142.3" width="56.2" height="43.8" fill="#F59E0B"/><rect x="108.2" y="98.5" width="56.2" height="43.8" fill="#6366F1"/><rect x="108.2" y="60.6" width="56.2" height="37.8" fill="#16A34A"/><rect x="170.4" y="188.1" width="56.2" height="13.9" fill="#3C3C42"/><rect x="170.4" y="144.3" width="56.2" height="43.8" fill="#F59E0B"/><rect x="170.4" y="108.4" width="56.2" height="35.8" fill="#6366F1"/><rect x="170.4" y="76.5" width="56.2" height="31.9" fill="#16A34A"/><rect x="232.7" y="198.0" width="56.2" height="4.0" fill="#FF5B5B"/><rect x="232.7" y="182.1" width="56.2" height="15.9" fill="#3C3C42"/><rect x="232.7" y="144.3" width="56.2" height="37.8" fill="#F59E0B"/><rect x="232.7" y="110.4" width="56.2" height="33.9" fill="#6366F1"/><rect x="232.7" y="74.6" width="56.2" height="35.8" fill="#16A34A"/><rect x="294.9" y="196.0" width="56.2" height="6.0" fill="#3C3C42"/><rect x="294.9" y="146.2" width="56.2" height="49.8" fill="#F59E0B"/><rect x="294.9" y="106.4" width="56.2" height="39.8" fill="#6366F1"/><rect x="294.9" y="78.5" width="56.2" height="27.9" fill="#16A34A"/><rect x="357.1" y="196.0" width="56.2" height="6.0" fill="#3C3C42"/><rect x="357.1" y="140.3" width="56.2" height="55.8" fill="#F59E0B"/><rect x="357.1" y="96.5" width="56.2" height="43.8" fill="#6366F1"/><rect x="357.1" y="64.6" width="56.2" height="31.9" fill="#16A34A"/><rect x="419.3" y="198.0" width="56.2" height="4.0" fill="#FF5B5B"/><rect x="419.3" y="124.3" width="56.2" height="73.7" fill="#F59E0B"/><rect x="419.3" y="84.5" width="56.2" height="39.8" fill="#6366F1"/><rect x="419.3" y="34.7" width="56.2" height="49.8" fill="#16A34A"/><rect x="481.6" y="198.0" width="56.2" height="4.0" fill="#FF5B5B"/><rect x="481.6" y="154.2" width="56.2" height="43.8" fill="#F59E0B"/><rect x="481.6" y="94.5" width="56.2" height="59.7" fill="#6366F1"/><rect x="481.6" y="52.6" width="56.2" height="41.8" fill="#16A34A"/><rect x="543.8" y="184.1" width="56.2" height="17.9" fill="#6366F1"/><rect x="543.8" y="170.1" width="56.2" height="13.9" fill="#16A34A"/><text x="74.1" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-03-23</text><text x="136.3" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-03-30</text><text x="198.6" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-06</text><text x="260.8" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-13</text><text x="323.0" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-20</text><text x="385.2" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-27</text><text x="447.4" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-04</text><text x="509.7" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-11</text><text x="571.9" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-18</text><g transform="translate(612,24)"><rect x="0" y="-6" width="12" height="10" fill="#FF5B5B"/><text x="16" y="3" font-size="10" fill="#3C3C42">Visa_TC15</text></g><g transform="translate(612,40)"><rect x="0" y="-6" width="12" height="10" fill="#3C3C42"/><text x="16" y="3" font-size="10" fill="#3C3C42">MC_CB</text></g><g transform="translate(612,56)"><rect x="0" y="-6" width="12" height="10" fill="#F59E0B"/><text x="16" y="3" font-size="10" fill="#3C3C42">Visa_TC40</text></g><g transform="translate(612,72)"><rect x="0" y="-6" width="12" height="10" fill="#6366F1"/><text x="16" y="3" font-size="10" fill="#3C3C42">Visa_RDR</text></g><g transform="translate(612,88)"><rect x="0" y="-6" width="12" height="10" fill="#16A34A"/><text x="16" y="3" font-size="10" fill="#3C3C42">Ethoca</text></g></svg></div>
+<h2>Auth-velocity hypothesis — preliminary read</h2>
+<p>A.4 (i) measures attempt volume from the CAID to each BIN/Issuer per week. The highest-volume BIN over the window was <strong>403163</strong> (SUTTON BANK) with 3,183 attempts and 15.56% average approval. In production we look for BINs where attempt volume rises ≥20% WoW AND approval rate drops — that pairing indicates the issuer is responding to our increased exposure. A.4 (ii) drills the same view to the merchant level so we can distinguish issuer-blacklisting-the-MID from descriptor-level effects.</p>
+<h2>Decline-mix trajectory — pattern observed</h2>
+<p class="section-intro">Across the 6-week window:</p>
+<table>
+<thead><tr><th>Decline reason</th><th class="num">2026-04-13</th><th class="num">2026-05-18</th><th class="num">Net change</th></tr></thead>
+<tbody>
+<tr><td>FraudSuspectedFraud</td><td class="num">37.5%</td><td class="num">32.9%</td><td class="num"><span class="delta-negative">-4.60 pp</span></td></tr>
+<tr><td>InsufficientFunds</td><td class="num">20.9%</td><td class="num">24.1%</td><td class="num"><span class="delta-positive">+3.20 pp</span></td></tr>
+<tr><td>DoNotHonor</td><td class="num">24.6%</td><td class="num">24.1%</td><td class="num"><span class="delta-negative">-0.50 pp</span></td></tr>
+<tr><td>ClosedAccountExpired</td><td class="num">6.4%</td><td class="num">6.6%</td><td class="num"><span class="delta-positive">+0.20 pp</span></td></tr>
+<tr><td>ProviderFailures</td><td class="num">3.8%</td><td class="num">6.2%</td><td class="num"><span class="delta-positive">+2.40 pp</span></td></tr>
+</tbody>
+</table>
+
+<div class="chart-wrap"><svg viewBox="0 0 720 240" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Decline-reason share — full window"><rect x="0" y="0" width="720" height="240" fill="#FFFFFF"/><text x="46" y="12" font-size="11" font-weight="600" fill="#3C3C42">Decline-reason share — full window</text><line x1="46" y1="202.0" x2="600" y2="202.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="156.0" x2="600" y2="156.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="110.0" x2="600" y2="110.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="64.0" x2="600" y2="64.0" stroke="#E5E5EA" stroke-width="1"/><line x1="46" y1="18.0" x2="600" y2="18.0" stroke="#E5E5EA" stroke-width="1"/><text x="40" y="205.0" font-size="10" fill="#6B7280" text-anchor="end">0.2%</text><text x="40" y="159.0" font-size="10" fill="#6B7280" text-anchor="end">12.2%</text><text x="40" y="113.0" font-size="10" fill="#6B7280" text-anchor="end">24.2%</text><text x="40" y="67.0" font-size="10" fill="#6B7280" text-anchor="end">36.2%</text><text x="40" y="21.0" font-size="10" fill="#6B7280" text-anchor="end">48.3%</text><path d="M46.0,34.0 L115.2,47.4 L184.5,55.8 L253.8,59.0 L323.0,64.1 L392.2,62.5 L461.5,69.9 L530.8,69.5 L600.0,76.8" fill="none" stroke="#FF5B5B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M46.0,122.4 L115.2,121.6 L184.5,119.2 L253.8,122.9 L323.0,120.9 L392.2,109.4 L461.5,110.3 L530.8,109.7 L600.0,110.6" fill="none" stroke="#3C3C42" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M46.0,120.1 L115.2,122.0 L184.5,119.0 L253.8,108.7 L323.0,115.2 L392.2,120.5 L461.5,117.0 L530.8,115.5 L600.0,110.6" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M46.0,180.9 L115.2,178.7 L184.5,178.0 L253.8,178.2 L323.0,177.9 L392.2,180.2 L461.5,178.2 L530.8,181.0 L600.0,177.4" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M46.0,194.0 L115.2,188.1 L184.5,187.0 L253.8,188.3 L323.0,176.5 L392.2,185.2 L461.5,183.5 L530.8,179.5 L600.0,179.1" fill="none" stroke="#6366F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="46.0" cy="34.0" r="2.5" fill="#FF5B5B" /><circle cx="115.2" cy="47.4" r="2.5" fill="#FF5B5B" /><circle cx="184.5" cy="55.8" r="2.5" fill="#FF5B5B" /><circle cx="253.8" cy="59.0" r="2.5" fill="#FF5B5B" /><circle cx="323.0" cy="64.1" r="2.5" fill="#FF5B5B" /><circle cx="392.2" cy="62.5" r="2.5" fill="#FF5B5B" /><circle cx="461.5" cy="69.9" r="2.5" fill="#FF5B5B" /><circle cx="530.8" cy="69.5" r="2.5" fill="#FF5B5B" /><circle cx="600.0" cy="76.8" r="2.5" fill="#FF5B5B" /><circle cx="46.0" cy="122.4" r="2.5" fill="#3C3C42" /><circle cx="115.2" cy="121.6" r="2.5" fill="#3C3C42" /><circle cx="184.5" cy="119.2" r="2.5" fill="#3C3C42" /><circle cx="253.8" cy="122.9" r="2.5" fill="#3C3C42" /><circle cx="323.0" cy="120.9" r="2.5" fill="#3C3C42" /><circle cx="392.2" cy="109.4" r="2.5" fill="#3C3C42" /><circle cx="461.5" cy="110.3" r="2.5" fill="#3C3C42" /><circle cx="530.8" cy="109.7" r="2.5" fill="#3C3C42" /><circle cx="600.0" cy="110.6" r="2.5" fill="#3C3C42" /><circle cx="46.0" cy="120.1" r="2.5" fill="#16A34A" /><circle cx="115.2" cy="122.0" r="2.5" fill="#16A34A" /><circle cx="184.5" cy="119.0" r="2.5" fill="#16A34A" /><circle cx="253.8" cy="108.7" r="2.5" fill="#16A34A" /><circle cx="323.0" cy="115.2" r="2.5" fill="#16A34A" /><circle cx="392.2" cy="120.5" r="2.5" fill="#16A34A" /><circle cx="461.5" cy="117.0" r="2.5" fill="#16A34A" /><circle cx="530.8" cy="115.5" r="2.5" fill="#16A34A" /><circle cx="600.0" cy="110.6" r="2.5" fill="#16A34A" /><circle cx="46.0" cy="180.9" r="2.5" fill="#F59E0B" /><circle cx="115.2" cy="178.7" r="2.5" fill="#F59E0B" /><circle cx="184.5" cy="178.0" r="2.5" fill="#F59E0B" /><circle cx="253.8" cy="178.2" r="2.5" fill="#F59E0B" /><circle cx="323.0" cy="177.9" r="2.5" fill="#F59E0B" /><circle cx="392.2" cy="180.2" r="2.5" fill="#F59E0B" /><circle cx="461.5" cy="178.2" r="2.5" fill="#F59E0B" /><circle cx="530.8" cy="181.0" r="2.5" fill="#F59E0B" /><circle cx="600.0" cy="177.4" r="2.5" fill="#F59E0B" /><circle cx="46.0" cy="194.0" r="2.5" fill="#6366F1" /><circle cx="115.2" cy="188.1" r="2.5" fill="#6366F1" /><circle cx="184.5" cy="187.0" r="2.5" fill="#6366F1" /><circle cx="253.8" cy="188.3" r="2.5" fill="#6366F1" /><circle cx="323.0" cy="176.5" r="2.5" fill="#6366F1" /><circle cx="392.2" cy="185.2" r="2.5" fill="#6366F1" /><circle cx="461.5" cy="183.5" r="2.5" fill="#6366F1" /><circle cx="530.8" cy="179.5" r="2.5" fill="#6366F1" /><circle cx="600.0" cy="179.1" r="2.5" fill="#6366F1" /><text x="46.0" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-03-23</text><text x="115.2" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-03-30</text><text x="184.5" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-06</text><text x="253.8" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-13</text><text x="323.0" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-20</text><text x="392.2" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-04-27</text><text x="461.5" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-04</text><text x="530.8" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-11</text><text x="600.0" y="218" font-size="10" fill="#6B7280" text-anchor="middle">2026-05-18</text><g transform="translate(612,24)"><line x1="0" y1="0" x2="14" y2="0" stroke="#FF5B5B" stroke-width="2"/><text x="18" y="3" font-size="10" fill="#3C3C42">FraudSuspectedFraud</text></g><g transform="translate(612,40)"><line x1="0" y1="0" x2="14" y2="0" stroke="#3C3C42" stroke-width="2"/><text x="18" y="3" font-size="10" fill="#3C3C42">InsufficientFunds</text></g><g transform="translate(612,56)"><line x1="0" y1="0" x2="14" y2="0" stroke="#16A34A" stroke-width="2"/><text x="18" y="3" font-size="10" fill="#3C3C42">DoNotHonor</text></g><g transform="translate(612,72)"><line x1="0" y1="0" x2="14" y2="0" stroke="#F59E0B" stroke-width="2"/><text x="18" y="3" font-size="10" fill="#3C3C42">ClosedAccountExpired</text></g><g transform="translate(612,88)"><line x1="0" y1="0" x2="14" y2="0" stroke="#6366F1" stroke-width="2"/><text x="18" y="3" font-size="10" fill="#3C3C42">ProviderFailures</text></g></svg></div>
+<div class="note">Interpretation: a SusFraud-rising signature indicates issuer fraud scoring tightening (the leading degradation indicator). A flat trajectory means the MID is in a stable phase.</div>
+<h2>Control-arm comparison (TEST vs CONTROL) — full window</h2>
+<p class="section-intro">In production this section accumulates the TEST vs CONTROL arm comparison across all 4 weekly runs in the window. CONTROL is the 50% of in-scope CIT 1st-attempt traffic routed through the merchant's default cascade. The monthly view highlights: (a) whether the two arms tracked together or diverged; (b) which weeks the gap widened; (c) whether CONTROL-side BIN degradation matches TEST-side, which would indicate an upstream cause rather than a new-MID effect.</p>
+<div class="note"><strong>Sample limitation.</strong> This sample report is generated from a single live CAID (937700006246) where no experiment routing is active, so only one arm of data exists. In production, mid_weekly_monitor.py will split the A1–A4 CSVs by <code>experiment_arm</code> tag and the table below will show TEST and CONTROL side-by-side across the full window. Structure shown for reference.</div>
+<table>
+<thead><tr><th>Metric</th><th class="num">TEST arm</th><th class="num">CONTROL arm</th><th class="num">Delta (TEST − CONTROL)</th></tr></thead>
+<tbody>
+<tr><td>Approval rate — current week</td><td class="num">9.33%</td><td class="num">awaiting CONTROL tagging</td><td class="num">—</td></tr>
+<tr><td>Approval rate — earliest week</td><td class="num">8.17%</td><td class="num">awaiting CONTROL tagging</td><td class="num">—</td></tr>
+<tr><td>Peak approval rate</td><td class="num">10.79%</td><td class="num">awaiting CONTROL tagging</td><td class="num">—</td></tr>
+<tr><td>Trough approval rate</td><td class="num">7.71%</td><td class="num">awaiting CONTROL tagging</td><td class="num">—</td></tr>
+<tr><td>Degrading BINs (current)</td><td class="num">2 / 15</td><td class="num">awaiting CONTROL tagging</td><td class="num">—</td></tr>
+<tr><td>Total dispute signals (window)</td><td class="num">582</td><td class="num">awaiting CONTROL tagging</td><td class="num">—</td></tr>
+</tbody>
+</table>
+
+<h2>Vs baseline (Appendix A.5) — month-over-month drift</h2>
+<p class="section-intro">A.5 captures the cohort's pre-launch normal state. This section compares the month's aggregate metrics against the baseline so leadership sees not just "the MID changed week over week" but also "the MID is N pp off its normal-state baseline" -- a more stable interpretive anchor than a noisy weekly slope.</p>
+<div class="note"><strong>Sample limitation.</strong> No baseline exists for this CAID (937700006246); the sample synthesizes one from the earliest 4 weeks of the available window. See <code>pivot_A5_937700006246.xlsx</code>. Production will populate from the locked baseline CSV.</div>
+<table>
+<thead><tr><th>Metric</th><th class="num">Baseline (first 4 weeks)</th><th class="num">Current week</th><th class="num">Peak in window</th><th class="num">Δ current vs baseline</th></tr></thead>
+<tbody>
+<tr><td>Approval rate</td><td class="num">8.29%</td><td class="num">9.33%</td><td class="num">10.79%</td><td class="num"><span class="delta-positive">+1.04 pp</span></td></tr>
+<tr><td>Auths per week</td><td class="num">6,676</td><td class="num">4,672</td><td class="num">13,059</td><td class="num">—</td></tr>
+</tbody>
+</table>
+
+<h2>Cooldown observations</h2>
+<p>For each pulled MID in this window, the operator runs Appendix A.6 at reintroduction. The recovery readout (per-BIN classification + cohort rollup) is pasted into the weekly HTML at that event and accumulated here for the monthly view.</p>
+<div class="note">No MID was pulled during this window for the sample CAID, so no cooldown observations apply. Production runs of this section list each pull event's rest period, the A.6 cohort-level recovery percentage, and whether the reintroduction stuck (i.e. the MID stayed in rotation for ≥2 weeks before any new degradation).</div>
+<h2>Recommendations going into next month</h2>
+<ol class="recs"><li>Track the currently-DEGRADING BINs into next week. If approval rate recovers, demote to WATCH or HEALTHY; if it stays low, the pull-trigger math gets closer to firing.</li><li>Re-calibrate Section 5.3 thresholds against the experiment MID's own normal-state variance after 4 weeks of stable data. If quieter than the 9-CAID baseline, tighten 1.5pp; if noisier, loosen.</li><li>Cross-reference A.4 (i) and (ii) for any DEGRADING BIN: drill down to the merchant level to confirm whether the issuer is hitting the MID broadly (all merchants) or only one descriptor.</li><li>Refresh A.3 mid-window if any Visa_TC15 or MC_CB counts move sharply WoW — unlike approval / decline-mix (immediately observable), dispute arrivals lag underlying captures by 30-60 days.</li></ol>
+<div class="footer">
+<div>Generated 2026-05-22 by <strong>MIDical Lab</strong> · FlexFactor</div>
+<div>CAID 937700006246</div>
+</div>
+</div>
+</div>
+</body>
+</html>
