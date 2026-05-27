@@ -4,10 +4,10 @@ Static HTML samples from the MIDical Lab experiment, hosted via GitHub Pages.
 
 ## Live links
 
-- **Landing page** — `https://thillchris.github.io/MIDical-Lab/`
-- **Weekly report** — `https://thillchris.github.io/MIDical-Lab/weekly.html`
-- **Monthly deep dive** — `https://thillchris.github.io/MIDical-Lab/monthly.html`
-- **Decision-tree walkthrough** — `https://thillchris.github.io/MIDical-Lab/walkthrough.html`
+- **Landing page** — `https://flexcharge.github.io/MIDical-Lab/`
+- **Weekly report** — `https://flexcharge.github.io/MIDical-Lab/weekly.html`
+- **Monthly deep dive** — `https://flexcharge.github.io/MIDical-Lab/monthly.html`
+- **Decision-tree walkthrough** — `https://flexcharge.github.io/MIDical-Lab/walkthrough.html`
 
 ## What's in here
 
